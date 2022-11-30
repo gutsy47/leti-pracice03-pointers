@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cstdlib>
-#include <chrono>
 #include <Windows.h>
 
 // 1) Используя арифметику указателей, заполняет квадратичную целочисленную матрицу порядка N (6,8,10)
@@ -25,6 +24,7 @@ void printMatrix(int *arr, int N, int width = 6) {
 }
 
 int getIntLength(int x) {
+    if (x == 0) return 1;
     int amount = 0;
     while (x) {
         x /= 10;
@@ -52,9 +52,13 @@ void updateMatrix(int x, int y, int value, int width = 6) {
     Sleep(100);
 }
 
+void zeroFill(int *arr, int N) {
+    for (int i = 0; i < N*N; ++i) *(arr++) = 0;
+}
+
 void snakeFill(int *arr, int N) {
     // Init
-    int startCursorPosY = getCursorPositionY() == 0 ? 0 : getCursorPositionY() + 1;
+    int startCursorPosY = getCursorPositionY();
     printMatrix(arr, N);
 
     // Main loop
@@ -70,6 +74,36 @@ void snakeFill(int *arr, int N) {
         pArr -= change - 1;
         change = -change;
     }
+
+    // Return cursor to the end of the matrix
+    for (int i = 0; i < N; ++i) putchar('\n');
+}
+
+void spiralFill(int *arr, int N) {
+    // Init
+    int startCursorPosY = getCursorPositionY();
+    printMatrix(arr, N);
+
+    // Main loop
+    int *pArr = arr;
+    int size = N;
+    for (int square = 0; square < N/2; ++square) {
+        int change = 1;
+        for (int direction = 0; direction < 4; ++direction) {
+            for (int i = 0; i < size-1; ++i) {
+                *pArr = getRandInt(1, N*N);
+                updateMatrix((pArr - arr) % N, startCursorPosY + (pArr - arr) / N, *pArr);
+                pArr += change;
+            }
+            change = abs(change) == 1 ? N : 1;
+            change = direction < 1 ? +change : -change;
+        }
+        size -= 2;
+        pArr += N + 1;
+    }
+
+    // Return cursor to the end of the matrix
+    for (int i = 0; i < N/2; ++i) putchar('\n');
 }
 
 int main() {
@@ -77,13 +111,15 @@ int main() {
     const int N = 6;
     int matrix[N][N];
     int *ptrMatrix = &matrix[0][0];
-    for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j) {
-            *((ptrMatrix + (N * i)) + j) = 0;
-        }
-    }
+    zeroFill(ptrMatrix, N);
 
     snakeFill(ptrMatrix, N);
+
+    std::cout << "Some output\n";
+    Sleep(1000);
+    zeroFill(ptrMatrix, N);
+
+    spiralFill(ptrMatrix, N);
 
     int exit;
     std::cin >> exit;
