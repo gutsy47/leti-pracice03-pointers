@@ -2,13 +2,6 @@
 #include <cstdlib>
 #include <Windows.h>
 
-// 1) Используя арифметику указателей, заполняет квадратичную целочисленную матрицу порядка N (6,8,10)
-//    случайными числами от 1 до N*N согласно схемам, приведенным на рисунках (спираль и змейка).
-//    Пользователь должен видеть процесс заполнения квадратичной матрицы.
-// 2) Получает новую матрицу, из матрицы п. 1, переставляя ее блоки в соответствии со схемами:
-// 3) Используя арифметику указателей, сортирует элементы любой сортировкой.
-// 4) Уменьшает, увеличивает, умножает или делит все элементы матрицы на введенное пользователем число.
-
 int getRandInt(int from, int to) {
     return from + std::rand() % to;
 }
@@ -129,6 +122,12 @@ void swapQuadrants(int *arr, int N, int q1, int q2) {
     }
 }
 
+void insertionSort(int *arr, int N) {
+    for (int *p1 = arr+1; p1 < arr + N; ++p1)
+        for (int *p2 = p1; p2 > arr && *(p2-1) > *p2; --p2)
+            std::swap(*(p2-1), *p2);
+}
+
 int main() {
     // Init matrix
     const int N = 6;
@@ -136,20 +135,5 @@ int main() {
     int *ptrMatrix = &matrix[0][0];
     zeroFill(ptrMatrix, N);
 
-    snakeFill(ptrMatrix, N);
-
-    std::cout << "Some output\n";
-    Sleep(1000);
-    zeroFill(ptrMatrix, N);
-
-    spiralFill(ptrMatrix, N);
-
-    printMatrix(ptrMatrix, N);
-    swapQuadrants(ptrMatrix, N, 1, 2);
-    std::cout << std::endl;
-    printMatrix(ptrMatrix, N);
-
-    int exit;
-    std::cin >> exit;
     return 0;
 }
