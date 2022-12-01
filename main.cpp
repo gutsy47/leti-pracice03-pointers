@@ -106,6 +106,29 @@ void spiralFill(int *arr, int N) {
     for (int i = 0; i < N/2; ++i) putchar('\n');
 }
 
+int *getQuadPointer(int *arr, int N, int quadNum) {
+    switch (quadNum) {
+        case 1: return (arr);
+        case 2: return (arr + N/2);
+        case 3: return (arr + N*N/2);
+        case 4: return (arr + N*N/2 + N/2);
+    }
+}
+
+void swapQuadrants(int *arr, int N, int q1, int q2) {
+    // Get first elements pointers of the quadrants
+    int *pQuad1 = getQuadPointer(arr, N, q1);
+    int *pQuad2 = getQuadPointer(arr, N, q2);
+
+    // Swap
+    for (int i = 0; i < N/2; ++i) {
+        for (int j = 0; j < N/2; ++j)
+            std::swap(*(pQuad1++), *(pQuad2++));
+        pQuad1 += N - N/2;
+        pQuad2 += N - N/2;
+    }
+}
+
 int main() {
     // Init matrix
     const int N = 6;
@@ -120,6 +143,11 @@ int main() {
     zeroFill(ptrMatrix, N);
 
     spiralFill(ptrMatrix, N);
+
+    printMatrix(ptrMatrix, N);
+    swapQuadrants(ptrMatrix, N, 1, 2);
+    std::cout << std::endl;
+    printMatrix(ptrMatrix, N);
 
     int exit;
     std::cin >> exit;
