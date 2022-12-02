@@ -50,6 +50,10 @@ void zeroFill(int *arr, int N) {
     for (int i = 0; i < N*N; ++i) *(arr++) = 0;
 }
 
+void randFill(int *arr, int N, int from, int to) {
+    for (int i = 0; i < N*N; ++i) *(arr++) = getRandInt(from, to);
+}
+
 void snakeFill(int *arr, int N) {
     // Init
     int startCursorPosY = getCursorPositionY();
@@ -150,6 +154,11 @@ void changeMatrixValues(int *arr, int N, int operation, int diff) {
             }
         }
     }
+}
+
+void subtractMatrix(int *arr1, int *arr2, int *arrRes, int N) {
+    for (int *p1 = arr1, *p2 = arr2, *pR = arrRes; p1 < arr1 + N*N; ++p1, ++p2, ++pR)
+        *pR = *p1 - *p2;
 }
 
 int main() {
@@ -273,6 +282,37 @@ int main() {
                 changeMatrixValues(ptrMatrix, N, userOp, userNumb);
                 std::cout << "Matrix after:\n";
                 printMatrix(ptrMatrix, N);
+                break;
+            }
+
+            // Individual task ü5. Matrix2 - matrix1
+            case 'i': {
+                // User input
+                int size;
+                std::cout << "<< Enter a size of the matrix:\n>> ";
+                std::cin >> size;
+                std::cin.sync();
+                if (std::cin.fail()) {
+                    std::cout << "TypeError: invalid literal for int with base 10.\n";
+                    std::cin.clear();
+                    break;
+                }
+
+                // Init matrix
+                int matrix1[size][size], matrix2[size][size], result[size][size];
+                int *pArr1 = &matrix1[0][0], *pArr2 = &matrix2[0][0], *pRes = &result[0][0];
+                randFill(pArr1, size, 1, size*size);
+                randFill(pArr2, size, 1, size*size);
+
+                // Subtract
+                std::cout << "Subtracting from matrix\n";
+                printMatrix(pArr1, size);
+                std::cout << "Matrix\n";
+                printMatrix(pArr2, size);
+                subtractMatrix(pArr1, pArr2, pRes, size);
+                std::cout << "Result:\n";
+                printMatrix(pRes, size);
+
                 break;
             }
 
