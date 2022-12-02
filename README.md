@@ -2,4 +2,4 @@
 # Two-dimensional static arrays. Pointers
 
 ## About
-Details are described in the report. (soon)
+Details are described in the report.
