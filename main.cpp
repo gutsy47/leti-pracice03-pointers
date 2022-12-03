@@ -211,7 +211,6 @@ int main() {
                     break;
                 }
 
-
                 // Swap
                 std::cout << "Matrix before the swap:\n";
                 printMatrix(ptrMatrix, N);
